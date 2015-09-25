@@ -7,10 +7,13 @@
 #include <string>
 #include "../maths/maths.h"
 
-namespace notche {
-	namespace graphics {
+namespace notche
+{
+	namespace graphics
+	{
 
-		class Shader {
+		class Shader
+		{
 		private:
 			GLuint shaderID;
 			std::string vertPath, fragPath;

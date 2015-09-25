@@ -4,10 +4,13 @@
 
 #include "maths.h"
 
-namespace notche {
-	namespace maths {
+namespace notche
+{
+	namespace maths
+	{
 		//float toRadians(float degrees);
-		struct mat4 {
+		struct mat4
+		{
 
 			float elements[4 * 4];
 

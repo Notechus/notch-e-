@@ -6,19 +6,25 @@
 #include <fstream>
 #include <sstream>
 
-namespace notche {
-	struct FileUtils {
-		static std::string read_file(const std::string& filepath) {
+namespace notche
+{
+	struct FileUtils
+	{
+		static std::string read_file(const std::string& filepath)
+		{
 			std::stringstream result;
 			std::ifstream stream(filepath);
-			if (stream.is_open()) {
-				while (stream.peek() != EOF) {
+			if (stream.is_open())
+			{
+				while (stream.peek() != EOF)
+				{
 					result << (char)stream.get();
 				}
 				stream.close();
 				return result.str();
 			}
-			else {
+			else
+			{
 				return "File not found";
 			}
 		}

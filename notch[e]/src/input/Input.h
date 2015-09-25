@@ -6,13 +6,16 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-namespace notche {
-	namespace input {
+namespace notche
+{
+	namespace input
+	{
 
 #define MAX_KEYS		1024
 #define MAX_BUTTONS		32
 
-		class Input {
+		class Input
+		{
 		private:
 			static bool keys[MAX_KEYS];
 			static bool mouseButtons[MAX_BUTTONS];

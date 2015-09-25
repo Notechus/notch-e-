@@ -1,17 +1,23 @@
 #include "mat4.h"
 #include <math.h>
 
-namespace notche {
-	namespace maths {
+namespace notche
+{
+	namespace maths
+	{
 
-		mat4::mat4() {
-			for (int i = 0; i < 4 * 4; i++) {
+		mat4::mat4()
+		{
+			for (int i = 0; i < 4 * 4; i++)
+			{
 				elements[i] = 0.0f;
 			}
 		}
 
-		mat4::mat4(const float& diagonal) {
-			for (int i = 0; i < 4 * 4; i++) {
+		mat4::mat4(const float& diagonal)
+		{
+			for (int i = 0; i < 4 * 4; i++)
+			{
 				elements[i] = 0.0f;
 			}
 			elements[0 + 0 * 4] = diagonal;
@@ -20,11 +26,13 @@ namespace notche {
 			elements[3 + 3 * 4] = diagonal;
 		}
 
-		mat4 mat4::identity() {
+		mat4 mat4::identity()
+		{
 			return mat4(1.0f);
 		}
 
-		mat4 mat4::orthographic(const float& left, const float& right, const float& bottom, const float& top, const float& near, const float& far) {
+		mat4 mat4::orthographic(const float& left, const float& right, const float& bottom, const float& top, const float& near, const float& far)
+		{
 			mat4 result(1.0f);
 
 			result.elements[0 + 0 * 4] = 2.0f / (right - left);
@@ -40,7 +48,8 @@ namespace notche {
 			return result;
 		}
 
-		mat4 mat4::perspective(const float& fov, const float& aspectRatio, const float& near, const float& far) {
+		mat4 mat4::perspective(const float& fov, const float& aspectRatio, const float& near, const float& far)
+		{
 			mat4 result(1.0f);
 
 			float q = 1.0f / (float)tan(maths::toRadians(0.5f*fov));
@@ -57,7 +66,8 @@ namespace notche {
 			return result;
 		}
 
-		mat4 mat4::translation(const vec3& translation) {
+		mat4 mat4::translation(const vec3& translation)
+		{
 			mat4 result(1.0f);
 
 			result.elements[0 + 3 * 4] = translation.x;
@@ -67,7 +77,8 @@ namespace notche {
 			return result;
 		}
 
-		mat4 mat4::rotation(const float& angle, const vec3& axis) {
+		mat4 mat4::rotation(const float& angle, const vec3& axis)
+		{
 			mat4 result(1.0f);
 
 			float r = maths::toRadians(angle);
@@ -90,7 +101,8 @@ namespace notche {
 			return result;
 		}
 
-		mat4 mat4::scale(const vec3& scale) {
+		mat4 mat4::scale(const vec3& scale)
+		{
 			mat4 result(1.0f);
 
 			result.elements[0 + 0 * 4] = scale.x;
@@ -100,11 +112,15 @@ namespace notche {
 			return result;
 		}
 
-		void mat4::multiply(const mat4& other) {
-			for (int y = 0; y < 4; y++) {
-				for (int x = 0; x < 4; x++) {
+		void mat4::multiply(const mat4& other)
+		{
+			for (int y = 0; y < 4; y++)
+			{
+				for (int x = 0; x < 4; x++)
+				{
 					float sum = 0.0f;
-					for (int e = 0; e < 4; e++) {//adding up appropriate rows
+					for (int e = 0; e < 4; e++)
+					{//adding up appropriate rows
 						sum += elements[x + e * 4] * other.elements[e + y * 4];
 					}
 					elements[x + y * 4] = sum;

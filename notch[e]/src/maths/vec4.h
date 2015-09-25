@@ -4,9 +4,12 @@
 
 #include <iostream>
 
-namespace notche {
-	namespace maths {
-		struct vec4 {
+namespace notche
+{
+	namespace maths
+	{
+		struct vec4
+		{
 			float x, y, z, w;
 
 			vec4() = default;
