@@ -13,6 +13,12 @@ namespace notche
 	namespace graphics
 	{
 
+		struct VertexData
+		{
+			maths::vec3 vertex;
+			maths::vec4 color;
+		};
+
 		class Renderable2D
 		{
 		protected:
@@ -20,19 +26,24 @@ namespace notche
 			maths::vec2 size;
 			maths::vec4 color;
 
-			VertexArray* vertexArray;
-			IndexBuffer* indexBuffer;
-			Shader& shader;
-		public:
-			Renderable2D(maths::vec3 position_, maths::vec2 size_, maths::vec4 color_, Shader& shader_);
-			virtual ~Renderable2D();
 
-			inline const VertexArray* getVAO() const { return vertexArray; }
-			inline const IndexBuffer* getIBO() const { return indexBuffer; }
-			inline Shader& getShader() const { return shader; }
+		public:
+			Renderable2D(maths::vec3 position_, maths::vec2 size_, maths::vec4 color_)
+				:position(position_), size(size_), color(color_)
+			{
+
+			}
+			virtual ~Renderable2D()
+			{
+
+			}
+
 			inline const maths::vec3& getPosition() const { return position; }
 			inline const maths::vec2& getSize() const { return size; }
 			inline const maths::vec4& getColor() const { return color; }
+			inline void setPosition(const maths::vec3 pos) { position = pos; }
+			inline void setSize(const maths::vec2 size) { this->size = size; }
+			inline void setColor(const maths::vec4 color) { this->color = color; }
 		};
 	}
 }

@@ -15,7 +15,9 @@ namespace notche
 			GLuint bufferID;
 			GLuint count;
 		public:
-			IndexBuffer(GLushort* data_, GLuint count_);
+			IndexBuffer(GLuint* data_, GLsizei count_);
+			IndexBuffer(GLushort* data_, GLsizei count_);
+			~IndexBuffer();
 
 			void bind() const;
 			void unbind() const;

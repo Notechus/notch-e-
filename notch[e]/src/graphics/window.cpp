@@ -79,6 +79,11 @@ namespace notche
 			std::cout << "OpenGL " << glGetString(GL_VERSION) << std::endl;
 		}
 
+		void Window::input()
+		{
+
+		}
+
 		void Window::clear() const
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

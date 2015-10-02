@@ -16,7 +16,7 @@ namespace notche
 			GLuint componentCount;
 		public:
 			Buffer(GLfloat* data_, GLsizei count_, GLuint componentCount_);
-
+			~Buffer();
 			void bind() const;
 			void unbind() const;
 
