@@ -8,39 +8,18 @@
 #include "src\graphics\shader.h"
 #include "src\maths\maths.h"
 
-#include "src\graphics\buffers\buffer.h"
-#include "src\graphics\buffers\indexbuffer.h"
-#include "src\graphics\buffers\vertexarray.h"
-
-#include "src\graphics\renderer2d.h"
-#include "src\graphics\renderable2d.h"
 #include "src\graphics\simple2drenderer.h"
 #include "src\graphics\batchrenderer2d.h"
 #include "src\graphics\static_sprite.h"
 #include "src\graphics\sprite.h"
+#include "src\utils\timer.h"
+
+#include "src\graphics\layers\tilelayer.h"
 
 using namespace notche;
 
 const int width = 960; //1024
 const int height = 540; //768
-
-void check_position(maths::vec3& position, bool& jumped)
-{
-	//total height - 8.0 total width - 15.0 for cube size (1,1)
-	if (position.x < 0.0f) position.x = 0.0f;
-	if (position.z < 0.0f) position.z = 0.0f;
-	if (position.x > 15.0f) position.x = 15.0f;
-	if (position.y > 8.0f) position.y = 8.0f;
-	if (position.y >= 2.5f) //necesseary to validate jump
-	{
-		jumped = true;
-	}
-	else if (position.y <= 0.0f)
-	{
-		jumped = false;
-		position.y = 0.0f;
-	}
-}
 
 #define BATCH_RENDERER 1
 
@@ -51,140 +30,74 @@ int main()
 
 	maths::mat4 ortho = maths::mat4::orthographic(0.0f, 16.0f, 0.0f, 9.0f, -1.0f, 1.0f);
 
-	graphics::Shader shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+	graphics::Shader* s = new graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+	graphics::Shader* s2 = new graphics::Shader("src/shaders/basic.vert", "src/shaders/basic.frag");
+	graphics::Shader& shader = *s;
+	graphics::Shader& shader2 = *s2;
 	shader.enable();
+	shader2.enable();
 
-	shader.setUniformMat4("pr_matrix", ortho);
-	//shader.setUniformMat4("ml_matrix", maths::mat4::translation(maths::vec3(4, 3, 0)));
+	//shader.setUniformMat4("pr_matrix", ortho);
 	shader.setUniform2f("light_pos", maths::vec2(4.0f, 1.5f));
-	shader.setUniform4f("colour", maths::vec4(0.2f, 0.3f, 0.8f, 1.0f));
+	shader2.setUniform2f("light_pos", maths::vec2(4.0f, 1.5f));
+	//shader.setUniform4f("colour", maths::vec4(0.2f, 0.3f, 0.8f, 1.0f));
 
-	std::vector<graphics::Renderable2D*> sprites;
-
+	graphics::Sprite sprite(0, 0, 1, 1, maths::vec4(1, 1, 1, 1));
+	//graphics::BatchRenderer2D renderer;
 	srand(time(NULL));
-
-	for (float y = 0; y < 9.0f; y += 0.05)
+	graphics::TileLayer layer(&shader);
+	for (float y = -9.0f; y < 9.0f; y += 0.1)
 	{
-		for (float x = 0; x < 16.0f; x += 0.05)
+		for (float x = -16.0f; x < 16.0f; x += 0.1)
 		{
-			sprites.push_back(new
-#if BATCH_RENDERER
-				graphics::Sprite
-#else
-				graphics::StaticSprite
-#endif
-				(x, y, 0.04f, 0.04f, maths::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)
-#if !BATCH_RENDERER
-				, shader
-#endif
-
-				));
+			layer.add(new graphics::Sprite(x, y, 0.09f, 0.09f, maths::vec4(rand() % 1000 / 1000.0f, 0, 1, 1)));
 		}
 	}
 
-#if BATCH_RENDERER
-	graphics::Sprite sprite(0, 0, 1, 1, maths::vec4(1, 1, 1, 1));
-	graphics::BatchRenderer2D renderer;
-#else
-	graphics::StaticSprite sprite(0, 0, 1, 1, maths::vec4(1, 1, 1, 1), shader);
-	graphics::Simple2DRenderer renderer;
-#endif
-
+	graphics::TileLayer layer2(&shader2);
+	layer2.add(&sprite);
 	maths::vec3 sprite_pos(0.0f, 8.0f, 0.0f);
 	sprite.setPosition(sprite_pos);
-	float speed = 1.0f;
 	float y_velocity = 0.0f; // initial y velocity
 	float gravity = 0.01f; // do want to fall too fast
-
-	float t = 0.0f;
-	float dt = 0.1f;
-
-	float currentTime = 0.0f;
-	float accumulator = 0.0f;
-
 	bool jumped = false;
 
+	Timer time;
+	float timer = 0;
+	unsigned int frames = 0;
 
 	while (!window.closed())
 	{
+		//maths::mat4 mat = maths::mat4::translation(maths::vec3(5, 5, 5));
+		//mat = mat * maths::mat4::rotation(time.elapsed() * 50.0f, maths::vec3(0, 0, 1));
+		//mat = mat * maths::mat4::translation(maths::vec3(-5, -5, -5));
+		//shader.setUniformMat4("ml_matrix", mat);
 		window.clear();
 		double x, y;
 		window.getMousePosition(x, y);
-		shader.setUniform2f("light_pos", maths::vec2((float) (x * 16.0f / (float) width), (float) (9.0f - y * 9.0f / (float) height)));
+		shader.setUniform2f("light_pos", maths::vec2((float) (x * 32.0f / 960.0f - 16.0f), (float) (9.0f - y * 18.0f / 540.0f)));
+		shader2.setUniform2f("light_pos", maths::vec2((float) (x * 32.0f / 960.0f - 16.0f), (float) (9.0f - y * 18.0f / 540.0f)));
+		layer.render();
+		layer2.render();
 		/*
-#if BATCH_RENDERER
 		renderer.begin();
-		#endif
 		renderer.submit(&sprite);
-		#if BATCH_RENDERER
 		renderer.end();
-		#endif
-		*/
-
-#if BATCH_RENDERER
-		renderer.begin();
-#endif
-		for (int i = 0; i < sprites.size(); i++)
-		{
-			renderer.submit(sprites[i]);
-		}
-#if BATCH_RENDERER
-		renderer.end();
-#endif
 		renderer.flush();
-		/*
-		if (sprite_pos.y > 0.0f) //move to physics method
-		{
-		// update position
-		//sprite_pos.y -= y_velocity;
-		//std::cout << sprite_pos.y << std::endl;
-		// update velocity and gravity
-		y_velocity += gravity;
-		if (sprite_pos.y <= 0.0f)y_velocity = 0.0f;
-		}
-		if (window.isKeyPressed(GLFW_KEY_W))
-		{
-		//sprite_pos.y += 0.1f * speed;
-		check_position(sprite_pos, jumped);
-		}
-		if (window.isKeyPressed(GLFW_KEY_S))
-		{
-		//sprite_pos.y -= 0.1f * speed;
-		check_position(sprite_pos, jumped);
-		}
-		if (window.isKeyPressed(GLFW_KEY_A))
-		{
-		sprite_pos.x -= 0.1f * speed;
-		check_position(sprite_pos, jumped);
-		}
-		if (window.isKeyPressed(GLFW_KEY_D))
-		{
-		sprite_pos.x += 0.1f * speed;
-		check_position(sprite_pos, jumped);
-		}
-		if (window.isKeyPressed(GLFW_KEY_SPACE))
-		{
-		if (sprite_pos.y <= 3.0f)
-		{
-		if (!jumped)
-		{//seems to be working
-		sprite_pos.y += 0.5f;
-		check_position(sprite_pos, jumped);
-		}
-		}
-		}
-		if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
-		{
-		speed = 1.0f;
-		}
-		else
-		{
-		speed = 2.0f;
-		}
+		*/
+		window.input(sprite_pos, jumped, gravity, y_velocity);
 		sprite.setPosition(sprite_pos);
-		check_position(sprite_pos, jumped);*/
 		window.update();
+		frames++;
+		if (time.elapsed() - timer > 1.0f)
+		{
+			timer += 1.0f;
+			std::cout << "FPS: " << frames << std::endl;
+			frames = 0;
+		}
 	}
+	delete s;
+	delete s2;
 
 	system("PAUSE");
 	return 0;

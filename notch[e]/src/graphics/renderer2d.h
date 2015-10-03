@@ -13,8 +13,10 @@ namespace notche
 
 		class Renderer2D
 		{
-		protected:
+		public:
+			virtual void begin() {}
 			virtual void submit(const Renderable2D* renderable) = 0;
+			virtual void end() {}
 			virtual void flush() = 0;
 		};
 

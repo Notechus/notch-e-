@@ -24,7 +24,9 @@ namespace notche
 			static mat4 rotation(const float& angle, const vec3& axis);
 			static mat4 scale(const vec3& scale);
 
-			void multiply(const mat4& other);
+			mat4& multiply(const mat4& other);
+			mat4& operator*=(const mat4& other);
+			friend mat4 operator*(mat4 left, const mat4& right);
 		};
 	}
 }
