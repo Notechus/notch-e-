@@ -1,8 +1,8 @@
 # notch-e-
 It's my noob attempt to create simple game engine notch[e]
 
-That's what is covered so far:
-1. Window </br>
+That's what is covered so far:</br>
+1. Window</br>
 2. GLFW, GLEW init</br>
 3. Input</br>
 4. Vectors(Vec2,Vec3,Vec4)</br>
