@@ -13,7 +13,7 @@ That's what is covered so far:
 9. Ultra-Fast Batch Renderer
 10. Optimization
 11. Layers
-12.
+12. 
 
 Currently learning some physics to work with physics engine.
 Huge thanks to Yen Chernikov(https://www.youtube.com/user/TheChernoProject) for his tutorials!
