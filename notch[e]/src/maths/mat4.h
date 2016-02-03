@@ -11,11 +11,14 @@ namespace notche
 		//float toRadians(float degrees);
 		struct mat4
 		{
-
-			float elements[4 * 4];
-
+			union
+			{
+				float elements[4 * 4];
+				vec4 columns[4];
+			};
 			mat4();
 			mat4(const float& diag);
+			vec4 getColumn(int index) const;
 
 			static mat4 identity();
 			static mat4 orthographic(const float& left, const float& right, const float& bottom, const float& top, const float& near, const float& far);
@@ -25,8 +28,12 @@ namespace notche
 			static mat4 scale(const vec3& scale);
 
 			mat4& multiply(const mat4& other);
+			vec3 multiply(const vec3& other) const;
+			vec4 multiply(const vec4& other) const;
 			mat4& operator*=(const mat4& other);
 			friend mat4 operator*(mat4 left, const mat4& right);
+			friend vec3 operator*(const mat4& left, const vec3& right);
+			friend vec4 operator*(const mat4& left, const vec4& right);
 		};
 	}
 }

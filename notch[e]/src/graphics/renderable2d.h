@@ -2,11 +2,12 @@
 #ifndef RENDERABLE2D_H_INCLUDED
 #define RENDERABLE2D_H_INCLUDED
 
-#include "buffers/buffer.h"
 #include "buffers/indexbuffer.h"
 #include "buffers/vertexarray.h"
+#include "renderer2d.h"
 #include "../maths/maths.h"
 #include "shader.h"
+
 
 namespace notche
 {
@@ -26,17 +27,19 @@ namespace notche
 			maths::vec3 position;
 			maths::vec2 size;
 			maths::vec4 color;
-
+			
+			Renderable2D() {}
 
 		public:
 			Renderable2D(maths::vec3 position_, maths::vec2 size_, maths::vec4 color_)
 				:position(position_), size(size_), color(color_)
-			{
-
-			}
+			{}
 			virtual ~Renderable2D()
-			{
+			{}
 
+			virtual void submit(Renderer2D* renderer) const
+			{
+				renderer->submit(this);
 			}
 
 			inline const maths::vec3& getPosition() const { return position; }

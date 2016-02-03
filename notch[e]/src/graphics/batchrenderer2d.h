@@ -4,6 +4,7 @@
 
 #include "renderer2d.h"
 #include "buffers/indexbuffer.h"
+#include "renderable2d.h"
 #include <cstddef>
 
 namespace notche

@@ -76,19 +76,19 @@ namespace notche
 
 			unsigned int c = a << 24 | b << 16 | g << 8 | r;
 
-			buffer->vertex = position;
+			buffer->vertex = *transformationBack * position;
 			buffer->color = c;
 			buffer++;
 
-			buffer->vertex = maths::vec3(position.x, position.y + size.y, position.z);
+			buffer->vertex = *transformationBack * maths::vec3(position.x, position.y + size.y, position.z);
 			buffer->color = c;
 			buffer++;
 
-			buffer->vertex = maths::vec3(position.x + size.x, position.y + size.y, position.z);
+			buffer->vertex = *transformationBack * maths::vec3(position.x + size.x, position.y + size.y, position.z);
 			buffer->color = c;
 			buffer++;
 
-			buffer->vertex = maths::vec3(position.x + size.x, position.y, position.z);
+			buffer->vertex = *transformationBack * maths::vec3(position.x + size.x, position.y, position.z);
 			buffer->color = c;
 			buffer++;
 

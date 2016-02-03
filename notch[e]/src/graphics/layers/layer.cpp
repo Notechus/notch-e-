@@ -32,13 +32,15 @@ namespace notche
 		{
 			shader->enable();
 			renderer->begin();
+			int x = 0;
 			for (const auto& i : renderables)
 			{
-				renderer->submit(i);
+				// renderer->submit(i);
+				i->submit(renderer);
+				renderer->pop();
 			}
 			renderer->end();
 			renderer->flush();
 		}
-
 	}
 }
